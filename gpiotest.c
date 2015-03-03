@@ -141,14 +141,19 @@ int main(int argc, char *argv[])
    int status;
    uint8_t  device_id, command_id;
 
-   if (argc != 3)
+   if (argc < 2 || argc > 3)
    {
       fprintf(stderr, "Usage: %s device_id command_id.\n", argv[0]);
       return -1;
-   }
+   } // else printf("argc %d argv[1] %s argv[2] %s\n", argc, argv[1], (argc==3)?argv[2]:"");
 
-   device_id = strtol(argv[1], NULL, 16);
-   command_id = strtol(argv[2], NULL, 16);
+   if (argc == 2) {
+     device_id  = (strtol(argv[1], NULL, 16) >> 8) & 0xff;
+     command_id = strtol(argv[1], NULL, 16) & 0xff;
+   } else {
+     device_id  = strtol(argv[1], NULL, 16) & 0xff;
+     command_id = strtol(argv[2], NULL, 16) & 0xff;
+   }
 
    printf("Executing command 0x%02x%02x.\n", device_id, command_id);
 
@@ -162,14 +167,14 @@ int main(int argc, char *argv[])
 
    printf("Connected to pigpio daemon.\n");
 
-   gpio_write(5, 1);
+   //gpio_write(5, 1);
    gpio_write(GPIO, 0);
-   time_sleep(1);
+   //time_sleep(1);
 
    transmit(device_id, command_id);
 
-   time_sleep(0.1);
-   gpio_write(5, 0);
+   //time_sleep(0.1);
+   //gpio_write(5, 0);
 
    pigpio_stop();
 
