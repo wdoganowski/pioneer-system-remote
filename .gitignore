@@ -1,4 +1,5 @@
 *.o
 gpiotest
 m10xptgl
+pioneer
 *.save

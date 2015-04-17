@@ -52,7 +52,7 @@ int prepare(int start, uint8_t data)
    {
      if (data & 0x80)
      { // 1
-       printf("1");
+       //printf("1");
        wf_data[j].gpioOn = 1<<GPIO;
        wf_data[j].usDelay = TIME_LOW_1;
        size += wf_data[j].usDelay;
@@ -63,7 +63,7 @@ int prepare(int start, uint8_t data)
        j++;
      } else
      { // 0
-       printf("0");
+       //printf("0");
        wf_data[j].gpioOn = 1<<GPIO;
        wf_data[j].usDelay = TIME_LOW_0;
        size += wf_data[j].usDelay;
@@ -75,7 +75,7 @@ int prepare(int start, uint8_t data)
      }
      data<<=1;
    }
-   printf("\n%d\n", size);
+   //printf("\n%d\n", size);
 
    return size;
 }
@@ -139,33 +139,38 @@ void transmit(uint8_t device_id, uint8_t command_id)
 int main(int argc, char *argv[])
 {
    int status;
-   uint8_t  device_id, command_id;
+   uint8_t  device_id=0xa5, command_id=0x38;
 
-   if (argc < 2 || argc > 3)
+   printf("Content-type: text/html\n\n");	// Tell the browser the type of document being sent
+   printf("<html>\n<head>\n<title>Pioneer Remote</title>\n</head>\n<body>\n");
+
+   if (argc!=2)
    {
-      fprintf(stderr, "Usage: %s device_id command_id.\n", argv[0]);
+      printf("<p>Usage: %s?cmd where xx is PWR, ON, OFF, VOL+, VOL-</p>\n</body>\n</html>\n", argv[0]);
       return -1;
-   } // else printf("argc %d argv[1] %s argv[2] %s\n", argc, argv[1], (argc==3)?argv[2]:"");
-
-   if (argc == 2) {
-     device_id  = (strtol(argv[1], NULL, 16) >> 8) & 0xff;
-     command_id = strtol(argv[1], NULL, 16) & 0xff;
    } else {
-     device_id  = strtol(argv[1], NULL, 16) & 0xff;
-     command_id = strtol(argv[2], NULL, 16) & 0xff;
+     if (     strcmp( argv[1], "PWR" ) == 0)	  command_id = 0x38;
+     else if (strcmp( argv[1], "POWER" ) == 0)    command_id = 0x38;
+     else if (strcmp( argv[1], "TOGGLE" ) == 0)   command_id = 0x38;
+     else if (strcmp( argv[1], "ON" )   == 0)	  command_id = 0x58;
+     else if (strcmp( argv[1], "OFF" )  == 0)	  command_id = 0xd8;
+     else if (strcmp( argv[1], "VOL+" ) == 0)	  command_id = 0x50;
+     else if (strcmp( argv[1], "UP" )   == 0)	  command_id = 0x50;
+     else if (strcmp( argv[1], "VOL-" ) == 0)	  command_id = 0xD0;
+     else if (strcmp( argv[1], "DOWN" ) == 0)	  command_id = 0xD0;
    }
 
-   printf("Executing command 0x%02x%02x.\n", device_id, command_id);
+   printf("<p>Executing command %s 0x%02x%02x</p>\n", argv[1], device_id, command_id);
 
    status = pigpio_start(0, 0);
 
    if (status < 0)
    {
-      fprintf(stderr, "pigpio initialisation failed.\n");
+      fprintf(stderr, "<p>pigpio initialisation failed</p>\n");
       return 1;
    }
 
-   printf("Connected to pigpio daemon.\n");
+   //printf("<p>Connected to pigpio daemon</p>\n");
 
    gpio_write(5, 1);
    gpio_write(GPIO, 0);
@@ -177,6 +182,8 @@ int main(int argc, char *argv[])
    gpio_write(5, 0);
 
    pigpio_stop();
+
+   printf("</body>\n</html>\n");
 
    return 0;
 }

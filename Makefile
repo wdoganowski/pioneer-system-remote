@@ -6,20 +6,23 @@ SIZE    = size
 
 CFLAGS  = -O3 -Wall
 
-ALL     = gpiotest                                  
+ALL     = pioneer install        
 
 LL      = -L. -lpigpiod_if -lpthread -lrt
 
 all:    $(ALL)
 
-gpiotest: gpiotest.o       
-	$(CC) -o gpiotest gpiotest.c $(LL)
+pioneer: pioneer.o       
+	$(CC) -o pioneer pioneer.c $(LL)
 
 clean:
 	rm -f *.o *.i *.s *~ $(ALL)
 
+install: pioneer
+	sudo cp ./pioneer /usr/lib/cgi-bin/
+
 # generated using gcc -MM *.c
 
-gpiotest.o: gpiotest.c
+pioneer.o: pioneer.c
 
 
