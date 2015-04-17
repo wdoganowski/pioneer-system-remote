@@ -146,18 +146,18 @@ int main(int argc, char *argv[])
 
    if (argc!=2)
    {
-      printf("<p>Usage: %s?cmd where xx is PWR, ON, OFF, VOL+, VOL-</p>\n</body>\n</html>\n", argv[0]);
+      printf("<p>Usage: %s?cmd where xx is pwr, power, toggle, on, off, vol+, vol-</p>\n</body>\n</html>\n", argv[0]);
       return -1;
    } else {
-     if (     strcmp( argv[1], "PWR" ) == 0)	  command_id = 0x38;
-     else if (strcmp( argv[1], "POWER" ) == 0)    command_id = 0x38;
-     else if (strcmp( argv[1], "TOGGLE" ) == 0)   command_id = 0x38;
-     else if (strcmp( argv[1], "ON" )   == 0)	  command_id = 0x58;
-     else if (strcmp( argv[1], "OFF" )  == 0)	  command_id = 0xd8;
-     else if (strcmp( argv[1], "VOL+" ) == 0)	  command_id = 0x50;
-     else if (strcmp( argv[1], "UP" )   == 0)	  command_id = 0x50;
-     else if (strcmp( argv[1], "VOL-" ) == 0)	  command_id = 0xD0;
-     else if (strcmp( argv[1], "DOWN" ) == 0)	  command_id = 0xD0;
+     if (     strcmp( argv[1], "pwr" ) == 0)	  command_id = 0x38;
+     else if (strcmp( argv[1], "power" ) == 0)    command_id = 0x38;
+     else if (strcmp( argv[1], "toggle" ) == 0)   command_id = 0x38;
+     else if (strcmp( argv[1], "on" )   == 0)	  command_id = 0x58;
+     else if (strcmp( argv[1], "off" )  == 0)	  command_id = 0xd8;
+     else if (strcmp( argv[1], "vol+" ) == 0)	  command_id = 0x50;
+     else if (strcmp( argv[1], "up" )   == 0)	  command_id = 0x50;
+     else if (strcmp( argv[1], "vol-" ) == 0)	  command_id = 0xD0;
+     else if (strcmp( argv[1], "down" ) == 0)	  command_id = 0xD0;
    }
 
    printf("<p>Executing command %s 0x%02x%02x</p>\n", argv[1], device_id, command_id);
